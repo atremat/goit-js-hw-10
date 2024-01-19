@@ -14,7 +14,7 @@ body {
 }
 
 input#datetime-picker {
-  padding: 0;
+  padding: 8px 16px;
   width: 272px;
   height: 40px;
   border-radius: 4px;
