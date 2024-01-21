@@ -1,7 +1,49 @@
 //importing flatpickr  - is a lightweight and powerful datetime picker.
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 let userSelectedDate;
+const refs = {
+  dateInput: document.querySelector('input#datetime-picker'),
+  startBtn: document.querySelector('button[data-start]'),
+  daySpan: document.querySelector('span[data-days]'),
+  hourSpan: document.querySelector('span[data-hours]'),
+  minSpan: document.querySelector('span[data-minutes]'),
+  secSpan: document.querySelector('span[data-seconds]'),
+};
+
+const timer = {
+  intervalId: null,
+  start() {
+    //disable DateTime input DateTime if timer started
+    refs.dateInput.disabled = true;
+    this.intervalId = setInterval(() => {
+      const currentTime = Date.now(); //this will be most likely deleted
+      //time left in ms
+      const deltaTime = userSelectedDate - currentTime;
+      //converted time from ms to the object { days, hours, minutes, seconds }
+      const convertedDeltaTime = convertMs(deltaTime);
+      //getting values from object and add zeros before single digit numbers using addLeadingZero function
+      const days = addLeadingZero(convertedDeltaTime.days);
+      const hours = addLeadingZero(convertedDeltaTime.hours);
+      const minutes = addLeadingZero(convertedDeltaTime.minutes);
+      const seconds = addLeadingZero(convertedDeltaTime.seconds);
+      //object with fixed zeros
+      const time = { days, hours, minutes, seconds };
+      //check if time is over and stop the timer
+      if (deltaTime <= 0) {
+        console.log('timer stopped. no time left');
+        clearInterval(intervalId);
+        return;
+      }
+
+      //output how much time left
+      updateClockFace(time);
+    }, 1000);
+  },
+};
 
 //options for flatpickr
 const options = {
@@ -13,9 +55,19 @@ const options = {
     //this method validates chosen date and time
     //chosen time has to be in the future
     if (selectedDates[0].getTime() < Date.now()) {
-      window.alert('Please choose a date in the future');
+      //show message wrong date
+      iziToast.show({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+        color: 'red',
+        position: 'topRight',
+        //TODO here must be more options........
+      });
+
       //button disabled if date&time is in the past
       refs.startBtn.disabled = true;
+      //saving selected datetime
+      userSelectedDate = selectedDates[0].getTime();
       return;
     }
     //if true, save selected date
@@ -25,21 +77,13 @@ const options = {
   },
 };
 
-const refs = {
-  dateTime: document.querySelector('input#datetime-picker'),
-  startBtn: document.querySelector('button[data-start]'),
-};
-
 //store the instance of flatpickr
-const fp = flatpickr(refs.dateTime, options);
+const fp = flatpickr(refs.dateInput, options);
 
 //start button listener
-refs.startBtn.addEventListener('click', onBtnClick);
-
-//callback of start button listener
-function onBtnClick(e) {
-  console.log(e);
-}
+refs.startBtn.addEventListener('click', () => {
+  timer.start();
+});
 
 //converts ms to the object { days, hours, minutes, seconds }
 function convertMs(ms) {
@@ -61,12 +105,22 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
+// TODO something with DAYS. it could have THREE DIGITS. It's likely that it's OK
 //adds zero before single digit numbers
 function addLeadingZero(value) {
+  //we push value in this function, which is result of convertMs(ms) function
+  //so seconds, minutes and hours are less or equals than 60, 60 and 24 respectively
+  //therefore if value has more than 2 digits, it's obviuosly days
+  //so checking if value>99 we can understand it's value of days
+  //therefore we can return this value, as it has already more than 2 digits
+  // if (value > 99) return value;
+
   return value.toString().padStart(2, '0');
 }
 
-iziToast.show({
-  title: 'Hey',
-  message: 'What would you like to add?',
-});
+function updateClockFace({ days, hours, minutes, seconds }) {
+  refs.daySpan.textContent = `${days}`;
+  refs.hourSpan.textContent = `${hours}`;
+  refs.minSpan.textContent = `${minutes}`;
+  refs.secSpan.textContent = `${seconds}`;
+}
