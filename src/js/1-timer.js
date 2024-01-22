@@ -1,8 +1,6 @@
-//importing flatpickr  - is a lightweight and powerful datetime picker.
+//flatpickr  - is a lightweight and powerful datetime picker.
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
 
 let userSelectedDate;
 const refs = {
@@ -14,10 +12,13 @@ const refs = {
   secSpan: document.querySelector('span[data-seconds]'),
 };
 
-const timer = {
-  intervalId: null,
+class Timer {
+  constructor(onTick) {
+    this.intervalId = null;
+    this.onTick = onTick;
+  }
   start() {
-    //disable DateTime input DateTime if timer started
+    //disable DateTime input if timer started
     refs.dateInput.disabled = true;
     this.intervalId = setInterval(() => {
       const currentTime = Date.now(); //this will be most likely deleted
@@ -34,16 +35,20 @@ const timer = {
       const time = { days, hours, minutes, seconds };
       //check if time is over and stop the timer
       if (deltaTime <= 0) {
-        console.log('timer stopped. no time left');
-        clearInterval(intervalId);
+        stop(intervalId);
         return;
       }
 
       //output how much time left
-      updateClockFace(time);
+      this.onTick(time);
     }, 1000);
-  },
-};
+  }
+  stop() {
+    clearInterval(intervalId);
+  }
+}
+
+const timer = new Timer(updateClockFace);
 
 //options for flatpickr
 const options = {
@@ -105,16 +110,8 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-// TODO something with DAYS. it could have THREE DIGITS. It's likely that it's OK
 //adds zero before single digit numbers
 function addLeadingZero(value) {
-  //we push value in this function, which is result of convertMs(ms) function
-  //so seconds, minutes and hours are less or equals than 60, 60 and 24 respectively
-  //therefore if value has more than 2 digits, it's obviuosly days
-  //so checking if value>99 we can understand it's value of days
-  //therefore we can return this value, as it has already more than 2 digits
-  // if (value > 99) return value;
-
   return value.toString().padStart(2, '0');
 }
 
