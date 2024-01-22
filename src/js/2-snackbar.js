@@ -11,21 +11,57 @@ refs.startBtn.addEventListener('click', e => {
   e.preventDefault();
   const delay = refs.delayInput.value;
   createPromiss(delay)
-    .then(success => {
-      console.log(success);
+    .then(value => {
+      console.log(value);
+      iziToast.show({
+        class: 'izitoast',
+        title: 'OK',
+        titleColor: '#FFF',
+        titleSize: '16px',
+        titleLineHeight: '24px',
+        message: `Fulfilled promise in ${delay}ms`,
+        messageColor: '#FFF',
+        messageSize: '16px',
+        messageLineHeight: '24px',
+        backgroundColor: '#59A10D',
+        color: '#FFF',
+        position: 'topRight',
+        iconUrl: '../img/icon-timer-stop.svg',
+        iconColor: '#FAFAFB',
+        progressBarColor: '#B5EA7C',
+      });
     })
     .catch(error => {
       console.log(error);
+      iziToast.show({
+        class: 'izitoast',
+        title: 'Error',
+        titleColor: '#FFF',
+        titleSize: '16px',
+        titleLineHeight: '24px',
+        message: 'Illegal operation',
+        messageColor: '#FFF',
+        messageSize: '16px',
+        messageLineHeight: '24px',
+        backgroundColor: '#EF4040',
+        color: '#FFF',
+        position: 'topRight',
+        iconUrl: '../img/icon-timer-stop.svg',
+        iconColor: '#FAFAFB',
+        progressBarColor: '#B51B1B',
+      });
     });
 });
 
 const createPromiss = delay => {
   return new Promise((resolve, reject) => {
+    const value = refs.form.elements.state.value;
     setTimeout(() => {
-      if (refs.form.elements.state.value === 'fulfilled') {
+      if (value === 'fulfilled') {
         resolve(`✅ Fulfilled promise in ${delay}ms`);
+      } else if (value === 'rejected') {
+        reject(`❌ Rejected promise in ${delay}ms`);
       }
-      reject(`❌ Rejected promise in ${delay}ms`);
     }, delay);
   });
 };
