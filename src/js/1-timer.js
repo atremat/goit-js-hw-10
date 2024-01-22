@@ -17,6 +17,7 @@ class Timer {
     this.intervalId = null;
     this.onTick = onTick;
   }
+
   start() {
     //disable DateTime input if timer started
     refs.dateInput.disabled = true;
@@ -25,12 +26,12 @@ class Timer {
       //time left in ms
       const deltaTime = userSelectedDate - currentTime;
       //converted time from ms to the object { days, hours, minutes, seconds }
-      const convertedDeltaTime = convertMs(deltaTime);
+      const convertedDeltaTime = this.convertMs(deltaTime);
       //getting values from object and add zeros before single digit numbers using addLeadingZero function
-      const days = addLeadingZero(convertedDeltaTime.days);
-      const hours = addLeadingZero(convertedDeltaTime.hours);
-      const minutes = addLeadingZero(convertedDeltaTime.minutes);
-      const seconds = addLeadingZero(convertedDeltaTime.seconds);
+      const days = this.addLeadingZero(convertedDeltaTime.days);
+      const hours = this.addLeadingZero(convertedDeltaTime.hours);
+      const minutes = this.addLeadingZero(convertedDeltaTime.minutes);
+      const seconds = this.addLeadingZero(convertedDeltaTime.seconds);
       //object with fixed zeros
       const time = { days, hours, minutes, seconds };
       //check if time is over and stop the timer
@@ -43,8 +44,34 @@ class Timer {
       this.onTick(time);
     }, 1000);
   }
+
   stop() {
     clearInterval(intervalId);
+  }
+
+  //converts ms to the object { days, hours, minutes, seconds }
+  convertMs(ms) {
+    // Number of milliseconds per unit of time
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    // Remaining days
+    const days = Math.floor(ms / day);
+    // Remaining hours
+    const hours = Math.floor((ms % day) / hour);
+    // Remaining minutes
+    const minutes = Math.floor(((ms % day) % hour) / minute);
+    // Remaining seconds
+    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+    return { days, hours, minutes, seconds };
+  }
+
+  //adds zero before single digit numbers
+  addLeadingZero(value) {
+    return value.toString().padStart(2, '0');
   }
 }
 
@@ -86,34 +113,7 @@ const options = {
 const fp = flatpickr(refs.dateInput, options);
 
 //start button listener
-refs.startBtn.addEventListener('click', () => {
-  timer.start();
-});
-
-//converts ms to the object { days, hours, minutes, seconds }
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  // Remaining days
-  const days = Math.floor(ms / day);
-  // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
-  return { days, hours, minutes, seconds };
-}
-
-//adds zero before single digit numbers
-function addLeadingZero(value) {
-  return value.toString().padStart(2, '0');
-}
+refs.startBtn.addEventListener('click', timer.start.bind(timer));
 
 function updateClockFace({ days, hours, minutes, seconds }) {
   refs.daySpan.textContent = `${days}`;
