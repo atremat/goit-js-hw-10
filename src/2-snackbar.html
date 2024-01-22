@@ -8,8 +8,30 @@
     <link rel="stylesheet" href="./css/2-snackbar.css" />
   </head>
   <body>
-    <section>
-      <a href="./index.html">Go to home</a>
-    </section>
+    <a href="./index.html">Go to home</a>
+
+    <div class="snackbar-wrapper">
+      <form class="form">
+        <label>
+          Delay (ms)
+          <input type="number" name="delay" required />
+        </label>
+
+        <fieldset>
+          <legend>State</legend>
+          <label>
+            <input type="radio" name="state" value="fulfilled" required />
+            Fulfilled
+          </label>
+          <label>
+            <input type="radio" name="state" value="rejected" required />
+            Rejected
+          </label>
+        </fieldset>
+
+        <button type="submit">Create notification</button>
+      </form>
+    </div>
+    <script type="module" src="./js/2-snackbar.js"></script>
   </body>
 </html>

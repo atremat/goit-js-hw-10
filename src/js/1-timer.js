@@ -113,8 +113,6 @@ const options = {
         iconUrl: '../img/icon-timer-stop.svg',
         iconColor: '#FAFAFB',
         progressBarColor: '#B51B1B',
-
-        //TODO here must be more options........
       });
 
       //button disabled if date&time is in the past
