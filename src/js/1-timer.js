@@ -25,20 +25,18 @@ class Timer {
       const currentTime = Date.now(); //this will be most likely deleted
       //time left in ms
       const deltaTime = userSelectedDate - currentTime;
-      //converted time from ms to the object { days, hours, minutes, seconds }
-      const convertedDeltaTime = this.convertMs(deltaTime);
-      //getting values from object and add zeros before single digit numbers using addLeadingZero function
-      const days = this.addLeadingZero(convertedDeltaTime.days);
-      const hours = this.addLeadingZero(convertedDeltaTime.hours);
-      const minutes = this.addLeadingZero(convertedDeltaTime.minutes);
-      const seconds = this.addLeadingZero(convertedDeltaTime.seconds);
-      //object with fixed zeros
-      const time = { days, hours, minutes, seconds };
+
       //check if time is over and stop the timer
       if (deltaTime <= 0) {
         stop(intervalId);
         return;
       }
+
+      //converted time from ms to the object { days, hours, minutes, seconds }
+      const convertedDeltaTime = this.convertMs(deltaTime);
+
+      //add zeros before single digit numbers using addLeadingZero function
+      const time = this.addLeadingZero(convertedDeltaTime);
 
       //output how much time left
       this.onTick(time);
@@ -71,7 +69,18 @@ class Timer {
 
   //adds zero before single digit numbers
   addLeadingZero(value) {
-    return value.toString().padStart(2, '0');
+    const {
+      days: inputDays,
+      hours: inputHours,
+      minutes: inputMinutes,
+      seconds: inputSeconds,
+    } = value;
+    const days = inputDays.toString().padStart(2, '0');
+    const hours = inputHours.toString().padStart(2, '0');
+    const minutes = inputMinutes.toString().padStart(2, '0');
+    const seconds = inputSeconds.toString().padStart(2, '0');
+
+    return { days, hours, minutes, seconds };
   }
 }
 
@@ -89,10 +98,22 @@ const options = {
     if (selectedDates[0].getTime() < Date.now()) {
       //show message wrong date
       iziToast.show({
+        class: 'wrong-date',
         title: 'Error',
+        titleColor: '#FFF',
+        titleSize: '16px',
+        titleLineHeight: '24px',
         message: 'Please choose a date in the future',
-        color: 'red',
+        messageColor: '#FFF',
+        messageSize: '16px',
+        messageLineHeight: '24px',
+        backgroundColor: '#EF4040',
+        color: '#FFF',
         position: 'topRight',
+        iconUrl: '../img/icon-timer-stop.svg',
+        iconColor: '#FAFAFB',
+        progressBarColor: '#B51B1B',
+
         //TODO here must be more options........
       });
 
@@ -113,8 +134,12 @@ const options = {
 const fp = flatpickr(refs.dateInput, options);
 
 //start button listener
-refs.startBtn.addEventListener('click', timer.start.bind(timer));
+refs.startBtn.addEventListener('click', () => {
+  timer.start();
+  refs.startBtn.disabled = true;
+});
 
+//show days, hours, minutes, seconds on the web page
 function updateClockFace({ days, hours, minutes, seconds }) {
   refs.daySpan.textContent = `${days}`;
   refs.hourSpan.textContent = `${hours}`;

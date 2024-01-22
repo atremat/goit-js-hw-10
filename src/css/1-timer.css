@@ -21,12 +21,36 @@ input#datetime-picker {
   border: 1px solid #808080;
   margin-right: 8px;
   margin-bottom: 32px;
+  color: #2e2f42;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.64px;
+}
+
+input#datetime-picker:focus-visible {
+  outline: unset;
+}
+
+input#datetime-picker:hover {
+  border: 1px solid #000;
+}
+
+input#datetime-picker:active {
+  border: 1px solid #4e75ff;
+  color: #000;
+}
+
+input#datetime-picker:disabled {
+  color: #808080;
+  background: #fafafa;
 }
 
 button[data-start] {
   width: 75px;
   height: 40px;
-  color: #989898;
+  color: #fff;
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
@@ -34,10 +58,18 @@ button[data-start] {
   line-height: 24px; /* 150% */
   letter-spacing: 0.64px;
   padding: 8px 16px;
-  border-radius: 8px;
-  background: #cfcfcf;
   border: none;
   margin-bottom: 32px;
+  border-radius: 8px;
+  background: #4e75ff;
+}
+button[data-start]:hover {
+  background: #6c8cff;
+}
+
+button[data-start]:disabled {
+  background: #cfcfcf;
+  color: #989898;
 }
 
 .timer {
@@ -68,4 +100,8 @@ button[data-start] {
   font-style: normal;
   font-weight: 400;
   line-height: 24px; /* 150% */
+}
+
+.wrong-date {
+  font-family: Montserrat;
 }
