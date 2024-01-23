@@ -24,7 +24,7 @@ refs.startBtn.addEventListener('click', e => {
         messageColor: '#FFF',
         messageSize: '16px',
         messageLineHeight: '24px',
-        iconUrl: './img/icon-ok.svg',
+        iconUrl: 'img/icon-ok.svg',
         iconColor: '#FAFAFB',
         backgroundColor: '#59A10D',
         color: '#FFF',

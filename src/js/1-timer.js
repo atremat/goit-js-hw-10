@@ -107,7 +107,7 @@ const options = {
         messageColor: '#FFF',
         messageSize: '16px',
         messageLineHeight: '24px',
-        iconUrl: './img/icon-error.svg',
+        iconUrl: '/img/icon-error.svg',
         iconColor: '#FAFAFB',
         backgroundColor: '#EF4040',
         color: '#FFF',
