@@ -10,10 +10,12 @@ const refs = {
 refs.startBtn.addEventListener('click', e => {
   e.preventDefault();
   const delay = refs.delayInput.value;
+  //if input delay is not set then return
+  if (delay === '') return;
   createPromiss(delay)
     .then(delay => {
-      iziToast.show({
-        class: 'izitoast',
+      iziToast.success({
+        class: 'izitoast-message',
         title: 'OK',
         titleColor: '#FFF',
         titleSize: '16px',
@@ -22,17 +24,17 @@ refs.startBtn.addEventListener('click', e => {
         messageColor: '#FFF',
         messageSize: '16px',
         messageLineHeight: '24px',
+        iconUrl: './img/icon-ok.svg',
+        iconColor: '#FAFAFB',
         backgroundColor: '#59A10D',
         color: '#FFF',
         position: 'topRight',
-        iconUrl: '../img/icon-ok.svg',
-        iconColor: '#FAFAFB',
         progressBarColor: '#B5EA7C',
       });
     })
     .catch(delay => {
-      iziToast.show({
-        class: 'izitoast',
+      iziToast.error({
+        class: 'izitoast-message',
         title: 'Error',
         titleColor: '#FFF',
         titleSize: '16px',
@@ -41,14 +43,15 @@ refs.startBtn.addEventListener('click', e => {
         messageColor: '#FFF',
         messageSize: '16px',
         messageLineHeight: '24px',
+        iconUrl: './img/icon-error.svg',
+        iconColor: '#FAFAFB',
         backgroundColor: '#EF4040',
         color: '#FFF',
         position: 'topRight',
-        iconUrl: '../img/icon-error.svg',
-        iconColor: '#FAFAFB',
         progressBarColor: '#B51B1B',
       });
     });
+  //clear form after promise created
   refs.form.reset();
 });
 

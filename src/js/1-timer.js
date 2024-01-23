@@ -96,9 +96,9 @@ const options = {
     //this method validates chosen date and time
     //chosen time has to be in the future
     if (selectedDates[0].getTime() < Date.now()) {
-      //show message wrong date
+      //show message if wrong date is set
       iziToast.show({
-        class: 'wrong-date',
+        class: 'izitoast-message',
         title: 'Error',
         titleColor: '#FFF',
         titleSize: '16px',
@@ -107,11 +107,11 @@ const options = {
         messageColor: '#FFF',
         messageSize: '16px',
         messageLineHeight: '24px',
+        iconUrl: './img/icon-error.svg',
+        iconColor: '#FAFAFB',
         backgroundColor: '#EF4040',
         color: '#FFF',
         position: 'topRight',
-        iconUrl: '../img/icon-error.svg',
-        iconColor: '#FAFAFB',
         progressBarColor: '#B51B1B',
       });
 

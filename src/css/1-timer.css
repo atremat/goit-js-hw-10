@@ -102,6 +102,6 @@ button[data-start]:disabled {
   line-height: 24px; /* 150% */
 }
 
-.wrong-date {
+.izitoast-message {
   font-family: Montserrat;
 }
