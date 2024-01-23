@@ -11,8 +11,7 @@ refs.startBtn.addEventListener('click', e => {
   e.preventDefault();
   const delay = refs.delayInput.value;
   createPromiss(delay)
-    .then(value => {
-      console.log(value);
+    .then(delay => {
       iziToast.show({
         class: 'izitoast',
         title: 'OK',
@@ -31,8 +30,7 @@ refs.startBtn.addEventListener('click', e => {
         progressBarColor: '#B5EA7C',
       });
     })
-    .catch(error => {
-      console.log(error);
+    .catch(delay => {
       iziToast.show({
         class: 'izitoast',
         title: 'Error',
@@ -51,6 +49,7 @@ refs.startBtn.addEventListener('click', e => {
         progressBarColor: '#B51B1B',
       });
     });
+  refs.form.reset();
 });
 
 const createPromiss = delay => {
@@ -58,9 +57,9 @@ const createPromiss = delay => {
     const value = refs.form.elements.state.value;
     setTimeout(() => {
       if (value === 'fulfilled') {
-        resolve(`✅ Fulfilled promise in ${delay}ms`);
+        resolve(delay);
       } else if (value === 'rejected') {
-        reject(`❌ Rejected promise in ${delay}ms`);
+        reject(delay);
       }
     }, delay);
   });
