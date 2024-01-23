@@ -97,7 +97,7 @@ const options = {
     //chosen time has to be in the future
     if (selectedDates[0].getTime() < Date.now()) {
       //show message if wrong date is set
-      iziToast.show({
+      iziToast.error({
         class: 'izitoast-message',
         title: 'Error',
         titleColor: '#FFF',
@@ -107,8 +107,6 @@ const options = {
         messageColor: '#FFF',
         messageSize: '16px',
         messageLineHeight: '24px',
-        iconUrl: '/img/icon-error.svg',
-        iconColor: '#FAFAFB',
         backgroundColor: '#EF4040',
         color: '#FFF',
         position: 'topRight',
