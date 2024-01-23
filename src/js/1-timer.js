@@ -110,7 +110,7 @@ const options = {
         backgroundColor: '#EF4040',
         color: '#FFF',
         position: 'topRight',
-        iconUrl: '../img/icon-timer-stop.svg',
+        iconUrl: '../img/icon-error.svg',
         iconColor: '#FAFAFB',
         progressBarColor: '#B51B1B',
       });
