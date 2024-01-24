@@ -14,12 +14,16 @@ const refs = {
 };
 
 class Timer {
+  static isActive = false;
+
   constructor(onTick) {
     this.intervalId = null;
     this.onTick = onTick;
   }
 
   start() {
+    //timer is activated
+    Timer.isActive = true;
     this.intervalId = setInterval(() => {
       const currentTime = Date.now(); //this will be most likely deleted
       //time left in ms
@@ -44,6 +48,10 @@ class Timer {
 
   stop() {
     clearInterval(this.intervalId);
+    //timer is over
+    Timer.isActive = false;
+    //as timer is over, btn is set 'enabled' to change new date-time
+    refs.startBtn.disabled = false;
   }
 
   //converts ms to the object { days, hours, minutes, seconds }
@@ -97,19 +105,9 @@ const options = {
     if (selectedDates[0].getTime() < Date.now()) {
       //show message if wrong date is set
       iziToast.error({
-        class: 'izitoast-message',
         title: 'Error',
-        titleColor: '#FFF',
-        titleSize: '16px',
-        titleLineHeight: '24px',
         message: 'Please choose a date in the future',
-        messageColor: '#FFF',
-        messageSize: '16px',
-        messageLineHeight: '24px',
-        backgroundColor: '#EF4040',
-        color: '#FFF',
         position: 'topRight',
-        progressBarColor: '#B51B1B',
       });
 
       //button disabled if date&time is in the past
@@ -120,8 +118,11 @@ const options = {
     }
     //if true, save selected date
     userSelectedDate = selectedDates[0].getTime();
-    //enable button
-    refs.startBtn.disabled = false;
+    //if timer is not active, we enable start button
+    if (!Timer.isActive) {
+      //enable button
+      refs.startBtn.disabled = false;
+    }
   },
 };
 
