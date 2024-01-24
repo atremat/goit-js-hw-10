@@ -20,8 +20,6 @@ class Timer {
   }
 
   start() {
-    //disable DateTime input if timer started
-    refs.dateInput.disabled = true;
     this.intervalId = setInterval(() => {
       const currentTime = Date.now(); //this will be most likely deleted
       //time left in ms
@@ -29,7 +27,7 @@ class Timer {
 
       //check if time is over and stop the timer
       if (deltaTime <= 0) {
-        stop(intervalId);
+        this.stop(this.intervalId);
         return;
       }
 
@@ -45,7 +43,7 @@ class Timer {
   }
 
   stop() {
-    clearInterval(intervalId);
+    clearInterval(this.intervalId);
   }
 
   //converts ms to the object { days, hours, minutes, seconds }
@@ -132,6 +130,10 @@ const fp = flatpickr(refs.dateInput, options);
 
 //start button listener
 refs.startBtn.addEventListener('click', () => {
+  //check if userSelectedDate is set
+  if (!userSelectedDate) {
+    return;
+  }
   timer.start();
   refs.startBtn.disabled = true;
 });
